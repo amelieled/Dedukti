@@ -35,7 +35,7 @@ let mk_config loc lid =
       nb_steps = (!nb_steps);
       target   = (match !target with None -> default_cfg.target | Some t -> t);
       strat    = (match !strat  with None -> default_cfg.strat  | Some s -> s) }
-  with _ -> raise @@ Scoping_error(loc, "invalid command configuration")
+  with _ -> raise (Scoping_error(loc, "invalid command configuration"))
 
 let loc_of_rs = function
   | [] -> assert false
@@ -90,6 +90,8 @@ let loc_of_rs = function
 %type <Preterm.prepattern> pattern_wp
 %type <Preterm.preterm> sterm
 %type <Preterm.preterm> term
+
+%right ARROW FATARROW
 
 %%
 
@@ -241,7 +243,7 @@ term:
       { PrePi (fst $1,Some (snd $1), $3, $5) }
   | LEFTPAR ID COLON aterm RIGHTPAR ARROW term
       { PrePi (fst $2,Some (snd $2), $4 ,$7) }
-  | aterm ARROW term
+  | term ARROW term
       { PrePi (Lexer.loc_of_pos $startpos,None,$1,$3) }
   | pid FATARROW term
       {PreLam (fst $1, snd $1, None, $3)}
