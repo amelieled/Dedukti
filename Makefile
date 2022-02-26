@@ -30,7 +30,7 @@ doc: bnf
 
 .PHONY: bnf
 bnf:
-	$(Q)cd parsing
+	#$(Q)cd parsing
 	$(MAKE) -f Makefile.bnf
 	$(Q)cd ..
 
